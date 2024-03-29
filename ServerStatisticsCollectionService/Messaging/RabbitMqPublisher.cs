@@ -14,11 +14,12 @@ namespace ServerStatisticsCollectionService.Messaging
         private readonly IModel _channel;
 
 
-        public RabbitMqPublisher(string hostname, string username, string password)
+        public RabbitMqPublisher(string hostname, int port, string username, string password)
         {
             var factory = new ConnectionFactory
             {
                 HostName = hostname,
+                Port = port,
                 UserName = username,
                 Password = password
             };
