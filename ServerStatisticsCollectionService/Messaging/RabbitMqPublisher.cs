@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace ServerStatisticsCollectionService.Messaging
@@ -27,9 +28,8 @@ namespace ServerStatisticsCollectionService.Messaging
             _channel = _connection.CreateModel();
         }
 
-        public void Publish<T>(string topic, T message)
+        public async Task PublishAsync<T>(string topic, T message)
         {
-
             string exchangeName = "ServerStatisticsExchange";
             string queueName = "ServerStatisticsQueue";
 
@@ -41,12 +41,14 @@ namespace ServerStatisticsCollectionService.Messaging
             string jsonMessage = JsonSerializer.Serialize(message);
             var bytesMessage = Encoding.UTF8.GetBytes(jsonMessage);
 
-            _channel.BasicPublish(
+
+            await Task.Run(() => _channel.BasicPublish(
                 exchange: exchangeName,
                 routingKey: topic,
                 basicProperties: null,
                 body: bytesMessage
-            );
+            ));
+
         }
 
         ~RabbitMqPublisher()

@@ -30,7 +30,7 @@ namespace ServerStatisticsCollectionService
         }
 
 
-        private Task CollectAndPublishServerStatistics(object state)
+        private async Task CollectAndPublishServerStatistics(object state)
         {
             double memoryUsage = GetMemoryUsage();
             double availableMemory = GetAvailableMemory();
@@ -44,8 +44,7 @@ namespace ServerStatisticsCollectionService
                 Timestamp = DateTime.Now
             };
 
-            _messageQueuePublisher.Publish($"ServerStatistics.{_serverIdentifier}", serverStatistics);
-            return Task.CompletedTask;
+            await _messageQueuePublisher.PublishAsync($"ServerStatistics.{_serverIdentifier}", serverStatistics);
         }
 
         private double GetMemoryUsage()

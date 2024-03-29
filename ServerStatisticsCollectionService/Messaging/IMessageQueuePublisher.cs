@@ -8,6 +8,6 @@ namespace ServerStatisticsCollectionService.Messaging
 {
     public interface IMessageQueuePublisher
     {
-        void Publish<T>(string topic, T message);
+        Task PublishAsync<T>(string topic, T message);
     }
 }

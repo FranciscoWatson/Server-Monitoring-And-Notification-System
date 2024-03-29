@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerStatisticsCollectionService", "ServerStatisticsCollectionService\ServerStatisticsCollectionService.csproj", "{245E82CB-72B2-4201-A776-369853717BC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerStatisticsCollectionService", "ServerStatisticsCollectionService\ServerStatisticsCollectionService.csproj", "{245E82CB-72B2-4201-A776-369853717BC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageProcessingService", "MessageProcessingService\MessageProcessingService.csproj", "{C2CC8AB7-AA94-4F36-9056-FF0C2E67423D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{245E82CB-72B2-4201-A776-369853717BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{245E82CB-72B2-4201-A776-369853717BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{245E82CB-72B2-4201-A776-369853717BC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2CC8AB7-AA94-4F36-9056-FF0C2E67423D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2CC8AB7-AA94-4F36-9056-FF0C2E67423D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2CC8AB7-AA94-4F36-9056-FF0C2E67423D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2CC8AB7-AA94-4F36-9056-FF0C2E67423D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
