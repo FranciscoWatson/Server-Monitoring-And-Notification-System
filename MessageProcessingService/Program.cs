@@ -20,7 +20,11 @@ var connectionString = configuration.GetSection("ConnectionStrings")["MongoDBCon
 
 
 var mongoDbServerStatisticsRepository = new MongoDbServerStatisticsRepository(connectionString);
-var rabbitMqConsumer = new RabbitMqConsumer(hostName, port, userName, password, mongoDbServerStatisticsRepository);
+
+var signalRUrl = configuration.GetSection("SignalRConfig")["SignalRUrl"];
+var anomalyDetection = new AnomalyDetection(signalRUrl, configuration);
+await anomalyDetection.StartAsync();
+var rabbitMqConsumer = new RabbitMqConsumer(hostName, port, userName, password, mongoDbServerStatisticsRepository, anomalyDetection);
 
 rabbitMqConsumer.Consume("ServerStatistics.*");
 
