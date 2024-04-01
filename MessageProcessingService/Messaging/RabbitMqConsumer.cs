@@ -17,10 +17,11 @@ namespace MessageProcessingService.Messaging
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly IServerStatisticsRepository _serverStatisticsRepository;
+        private readonly AnomalyDetection _anomalyDetection;
 
 
 
-        public RabbitMqConsumer(string hostname, int port, string username, string password, IServerStatisticsRepository serverStatisticsRepository)
+        public RabbitMqConsumer(string hostname, int port, string username, string password, IServerStatisticsRepository serverStatisticsRepository, AnomalyDetection anomalyDetection)
         {
             var factory = new ConnectionFactory
             {
@@ -32,6 +33,7 @@ namespace MessageProcessingService.Messaging
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
             _serverStatisticsRepository = serverStatisticsRepository;
+            _anomalyDetection = anomalyDetection;
         }
         public void Consume(string topic)
         {
@@ -49,6 +51,8 @@ namespace MessageProcessingService.Messaging
                 var body = args.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 var statistics = JsonSerializer.Deserialize<ServerStatistics>(message);
+
+                await _anomalyDetection.SendAnomalyAlertAsync(statistics);
 
                 await _serverStatisticsRepository.InsertAsync(statistics);
 
