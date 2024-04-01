@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageProcessingService
+namespace MessageProcessingService.Models
 {
     public class ServerStatistics
     {
