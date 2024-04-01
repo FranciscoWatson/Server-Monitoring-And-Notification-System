@@ -2,6 +2,7 @@
 using MessageProcessingService.Messaging;
 using MessageProcessingService.Models;
 using MessageProcessingService.Repository;
+using MessageProcessingService.Services;
 using Microsoft.Extensions.Configuration;
 
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 
-namespace ServerStatisticsCollectionService
+namespace ServerStatisticsCollectionService.Services
 {
     public class ServerStatisticsCollector
     {
@@ -63,9 +63,9 @@ namespace ServerStatisticsCollectionService
         private double GetAvailableMemory()
         {
             var ramCounter = new PerformanceCounter("Memory", "Available MBytes");
-           
+
             return ramCounter.NextValue();
-            
+
         }
 
         public double GetCpuUsage()
@@ -73,7 +73,7 @@ namespace ServerStatisticsCollectionService
             using (var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total"))
             {
                 cpuCounter.NextValue();
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(1000);
                 return cpuCounter.NextValue();
             }
         }

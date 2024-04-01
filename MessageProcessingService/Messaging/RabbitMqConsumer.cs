@@ -1,5 +1,6 @@
 ﻿using MessageProcessingService.Models;
 using MessageProcessingService.Repository;
+using MessageProcessingService.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;

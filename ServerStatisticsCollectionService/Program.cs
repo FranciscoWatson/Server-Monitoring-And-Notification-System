@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using ServerStatisticsCollectionService;
+using ServerStatisticsCollectionService.Factories;
 
 
 var configuration = new ConfigurationBuilder()
