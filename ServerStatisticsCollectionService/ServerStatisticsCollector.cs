@@ -70,9 +70,14 @@ namespace ServerStatisticsCollectionService
 
         public double GetCpuUsage()
         {
-            var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-            return cpuCounter.NextValue();
+            using (var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total"))
+            {
+                cpuCounter.NextValue();
+                System.Threading.Thread.Sleep(1000);
+                return cpuCounter.NextValue();
+            }
         }
+
     }
-    
+
 }
