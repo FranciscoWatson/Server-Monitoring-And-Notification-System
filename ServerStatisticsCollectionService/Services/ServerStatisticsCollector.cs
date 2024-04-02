@@ -15,10 +15,10 @@ namespace ServerStatisticsCollectionService.Services
         private readonly string _serverIdentifier;
         private readonly int _samplingIntervalSeconds;
         private readonly IMessageQueuePublisher _messageQueuePublisher;
-        public ServerStatisticsCollector(string serverIdentifier, int samplingIntervalSeconds, IMessageQueuePublisher messageQueue)
+        public ServerStatisticsCollector(ServerStatisticsConfig config, IMessageQueuePublisher messageQueue)
         {
-            _serverIdentifier = serverIdentifier;
-            _samplingIntervalSeconds = samplingIntervalSeconds;
+            _serverIdentifier = config.ServerIdentifier;
+            _samplingIntervalSeconds = config.SamplingIntervalSeconds;
             _messageQueuePublisher = messageQueue;
         }
 

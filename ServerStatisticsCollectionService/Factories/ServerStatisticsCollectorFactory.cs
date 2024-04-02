@@ -1,5 +1,7 @@
-﻿using MessagingQueueLibrary.Publisher;
+﻿using MessagingQueueLibrary.Models;
+using MessagingQueueLibrary.Publisher;
 using Microsoft.Extensions.Configuration;
+using ServerStatisticsCollectionService.Models;
 using ServerStatisticsCollectionService.Services;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,9 @@ namespace ServerStatisticsCollectionService.Factories
     {
         public ServerStatisticsCollector Create(IConfiguration configuration, IMessageQueuePublisher messageQueuePublisher)
         {
-            var samplingIntervalSeconds = Convert.ToInt32(configuration.GetSection("ServerStatisticsConfig")["SamplingIntervalSeconds"]);
-            var serverIdentifier = configuration.GetSection("ServerStatisticsConfig")["ServerIdentifier"];
+            var serverStatisticsConfig = configuration.GetSection("ServerStatisticsConfig").Get<ServerStatisticsConfig>();
 
-            return new ServerStatisticsCollector(serverIdentifier, samplingIntervalSeconds, messageQueuePublisher);
+            return new ServerStatisticsCollector(serverStatisticsConfig, messageQueuePublisher);
         }
     }
 }
