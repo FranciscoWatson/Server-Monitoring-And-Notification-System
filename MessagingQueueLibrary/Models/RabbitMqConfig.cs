@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageProcessingService.Models
+namespace MessagingQueueLibrary.Models
 {
     public class RabbitMqConfig
     {

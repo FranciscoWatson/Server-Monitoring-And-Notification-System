@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using ServerStatisticsCollectionService.Messaging;
+﻿using MessagingQueueLibrary.Publisher;
+using Microsoft.Extensions.Configuration;
 using ServerStatisticsCollectionService.Services;
 using System;
 using System.Collections.Generic;

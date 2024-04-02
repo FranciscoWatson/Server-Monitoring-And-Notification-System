@@ -1,17 +1,21 @@
-﻿using MessageProcessingService.Models;
+﻿using MessagingQueueLibrary.Models;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace MessageProcessingService.Messaging
+namespace MessagingQueueLibrary.Publisher
 {
-    public class RabbitMqConsumer : IMessageQueueConsumer
+    public class RabbitMqPublisher : IMessageQueuePublisher
     {
         private readonly IConnection _connection;
         private readonly IModel _channel;
 
-        public RabbitMqConsumer(RabbitMqConfig config)
+
+        public RabbitMqPublisher(RabbitMqConfig config)
         {
             var factory = new ConnectionFactory
             {
@@ -23,7 +27,8 @@ namespace MessageProcessingService.Messaging
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
         }
-        public void Consume<T>(string topic, Func<T, Task> onMessageReceived)
+
+        public async Task PublishAsync<T>(string topic, T message)
         {
             string exchangeName = "ServerStatisticsExchange";
             string queueName = "ServerStatisticsQueue";
@@ -32,25 +37,25 @@ namespace MessageProcessingService.Messaging
             _channel.QueueDeclare(queueName, durable: false, exclusive: false, autoDelete: false);
             _channel.QueueBind(queueName, exchangeName, topic);
 
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += async (sender, args) =>
-            {
-                var body = args.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                var statistics = JsonSerializer.Deserialize<T>(message);
 
-                await onMessageReceived?.Invoke(statistics);
+            string jsonMessage = JsonSerializer.Serialize(message);
+            var bytesMessage = Encoding.UTF8.GetBytes(jsonMessage);
 
-                _channel.BasicAck(args.DeliveryTag, multiple: false);
-            };
 
-            _channel.BasicConsume(queueName, autoAck: false, consumer);
+            await Task.Run(() => _channel.BasicPublish(
+                exchange: exchangeName,
+                routingKey: topic,
+                basicProperties: null,
+                body: bytesMessage
+            ));
+
         }
 
-        ~RabbitMqConsumer()
+        ~RabbitMqPublisher()
         {
             _channel?.Close();
             _connection?.Close();
         }
+
     }
 }

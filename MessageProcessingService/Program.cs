@@ -1,8 +1,9 @@
-﻿using MessageProcessingService.Messaging;
-using MessageProcessingService.Models;
+﻿using MessageProcessingService.Models;
 using MessageProcessingService.Repository;
 using MessageProcessingService.Services;
 using Microsoft.Extensions.Configuration;
+using MessagingQueueLibrary.Models;
+using MessagingQueueLibrary.Consumer;
 
 
 var configuration = new ConfigurationBuilder()

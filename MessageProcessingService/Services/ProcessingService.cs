@@ -1,6 +1,6 @@
-﻿using MessageProcessingService.Messaging;
-using MessageProcessingService.Models;
+﻿using MessageProcessingService.Models;
 using MessageProcessingService.Repository;
+using MessagingQueueLibrary.Consumer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
