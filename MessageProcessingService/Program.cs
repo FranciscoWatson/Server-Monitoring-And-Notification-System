@@ -1,6 +1,4 @@
-﻿using MessageProcessingService;
-using MessageProcessingService.Messaging;
-using MessageProcessingService.Models;
+﻿using MessageProcessingService.Messaging;
 using MessageProcessingService.Repository;
 using MessageProcessingService.Services;
 using Microsoft.Extensions.Configuration;
@@ -25,9 +23,11 @@ var mongoDbServerStatisticsRepository = new MongoDbServerStatisticsRepository(co
 var signalRUrl = configuration.GetSection("SignalRConfig")["SignalRUrl"];
 var anomalyDetection = new AnomalyDetection(signalRUrl, configuration);
 await anomalyDetection.StartAsync();
-var rabbitMqConsumer = new RabbitMqConsumer(hostName, port, userName, password, mongoDbServerStatisticsRepository, anomalyDetection);
+var rabbitMqConsumer = new RabbitMqConsumer(hostName, port, userName, password);
 
-rabbitMqConsumer.Consume("ServerStatistics.*");
+var processingService = new ProcessingService(mongoDbServerStatisticsRepository, anomalyDetection, rabbitMqConsumer);
+
+await processingService.ProcessMessageAsync();
 
 
 Console.ReadKey();

@@ -1,15 +1,7 @@
-﻿using MessageProcessingService.Models;
-using MessageProcessingService.Repository;
-using MessageProcessingService.Services;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 
 namespace MessageProcessingService.Messaging
 {
@@ -17,12 +9,8 @@ namespace MessageProcessingService.Messaging
     {
         private readonly IConnection _connection;
         private readonly IModel _channel;
-        private readonly IServerStatisticsRepository _serverStatisticsRepository;
-        private readonly AnomalyDetection _anomalyDetection;
 
-
-
-        public RabbitMqConsumer(string hostname, int port, string username, string password, IServerStatisticsRepository serverStatisticsRepository, AnomalyDetection anomalyDetection)
+        public RabbitMqConsumer(string hostname, int port, string username, string password)
         {
             var factory = new ConnectionFactory
             {
@@ -33,14 +21,11 @@ namespace MessageProcessingService.Messaging
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _serverStatisticsRepository = serverStatisticsRepository;
-            _anomalyDetection = anomalyDetection;
         }
-        public void Consume(string topic)
+        public void Consume<T>(string topic, Func<T, Task> onMessageReceived)
         {
             string exchangeName = "ServerStatisticsExchange";
             string queueName = "ServerStatisticsQueue";
-
 
             _channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
             _channel.QueueDeclare(queueName, durable: false, exclusive: false, autoDelete: false);
@@ -51,18 +36,11 @@ namespace MessageProcessingService.Messaging
             {
                 var body = args.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                var statistics = JsonSerializer.Deserialize<ServerStatistics>(message);
+                var statistics = JsonSerializer.Deserialize<T>(message);
 
-                await _anomalyDetection.SendAnomalyAlertAsync(statistics);
-
-                await _serverStatisticsRepository.InsertAsync(statistics);
-
-                Console.WriteLine(message);
-
+                await onMessageReceived?.Invoke(statistics);
 
                 _channel.BasicAck(args.DeliveryTag, multiple: false);
-
-
             };
 
             _channel.BasicConsume(queueName, autoAck: false, consumer);
