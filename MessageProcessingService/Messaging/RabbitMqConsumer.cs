@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using MessageProcessingService.Models;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
@@ -10,14 +11,14 @@ namespace MessageProcessingService.Messaging
         private readonly IConnection _connection;
         private readonly IModel _channel;
 
-        public RabbitMqConsumer(string hostname, int port, string username, string password)
+        public RabbitMqConsumer(RabbitMqConfig config)
         {
             var factory = new ConnectionFactory
             {
-                HostName = hostname,
-                Port = port,
-                UserName = username,
-                Password = password
+                HostName = config.Hostname,
+                Port = config.Port,
+                UserName = config.Username,
+                Password = config.Password
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();

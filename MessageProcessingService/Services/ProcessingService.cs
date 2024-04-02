@@ -1,14 +1,13 @@
 ﻿using MessageProcessingService.Messaging;
 using MessageProcessingService.Models;
 using MessageProcessingService.Repository;
-using MessageProcessingService.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageProcessingService
+namespace MessageProcessingService.Services
 {
     public class ProcessingService
     {
