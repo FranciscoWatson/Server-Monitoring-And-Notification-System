@@ -19,4 +19,4 @@ var statisticsCollectionService = serverStatisticsCollectorFactory.Create(config
 
 statisticsCollectionService.StartAsync();
 
-Console.ReadKey();
+await Task.Run(() => Thread.Sleep(Timeout.Infinite));
