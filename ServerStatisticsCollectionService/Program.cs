@@ -2,9 +2,11 @@
 using ServerStatisticsCollectionService.Factories;
 
 
+
 var configuration = new ConfigurationBuilder()
 .SetBasePath(Directory.GetCurrentDirectory())
-.AddJsonFile("appsettings.json")
+.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+.AddEnvironmentVariables()
 .Build();
 
 var messageQueuePublisherFactory = new MessageQueuePublisherFactory();
