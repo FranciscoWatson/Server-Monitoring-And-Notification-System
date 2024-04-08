@@ -44,7 +44,7 @@ namespace MessageProcessingService.Services
         {
 
 
-           
+
             if (currentStatistics.MemoryUsage > _previousStatistics.MemoryUsage * (1 + _memoryUsageAnomalyThresholdPercentage))
             {
                 string alertMessage = $"Anomaly detected: Memory usage increased to {currentStatistics.MemoryUsage}MB, exceeding the threshold.";

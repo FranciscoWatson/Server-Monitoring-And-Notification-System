@@ -7,9 +7,10 @@ using MessagingQueueLibrary.Consumer;
 
 
 var configuration = new ConfigurationBuilder()
-.SetBasePath(Directory.GetCurrentDirectory())
-.AddJsonFile("appsettings.json")
-.Build();
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables()
+    .Build();
 
 var connectionString = configuration.GetSection("ConnectionStrings")["MongoDBConnection"];
 var rabbitMQConfig = configuration.GetSection("RabbitMQConfig").Get<RabbitMqConfig>();
@@ -30,4 +31,4 @@ var processingService = new ProcessingService(mongoDbServerStatisticsRepository,
 await processingService.ProcessMessageAsync();
 
 
-Console.ReadKey();
+await Task.Run(() => Thread.Sleep(Timeout.Infinite));
