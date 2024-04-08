@@ -3,16 +3,16 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Since you're inside the project directory, adjust the path accordingly.
-COPY ["SignalREventConsumer.csproj", "./"]
-RUN dotnet restore "SignalREventConsumer.csproj"
+COPY ["SignalREventConsumer/SignalREventConsumer.csproj", "SignalREventConsumer/"]
+RUN dotnet restore "SignalREventConsumer/SignalREventConsumer.csproj"
 
 # Copy the rest of the source code
 COPY . .
 
-RUN dotnet build "SignalREventConsumer.csproj" -c Release -o /app/build
+RUN dotnet build "SignalREventConsumer/SignalREventConsumer.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "SignalREventConsumer.csproj" -c Release -o /app/publish
+RUN dotnet publish "SignalREventConsumer/SignalREventConsumer.csproj" -c Release -o /app/publish
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/runtime:8.0 AS final
