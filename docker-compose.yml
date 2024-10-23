@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    networks:
+      - server_stats_network
+
+  mongo:
+    image: mongo
+    networks:
+      - server_stats_network
+
+  signalrapp:
+    build:
+      context: ./
+      dockerfile: SignalRApp/Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - server_stats_network
+
+  serverstats:
+    build:
+      context: ./
+      dockerfile: ServerStatisticsCollectionService/Dockerfile
+    environment:
+      RabbitMQConfig__HostName: rabbitmq
+    networks:
+      - server_stats_network
+    depends_on:
+      - rabbitmq
+
+  signaleventconsumer:
+    build:
+      context: .
+      dockerfile: SignalREventConsumer/Dockerfile
+    environment:
+      SignalRConfig__SignalRUrl: "http://signalrapp:8080/alertHub"
+    networks:
+      - server_stats_network
+    depends_on:
+      - signalrapp
+
+  messagingprocessingservice:
+    build:
+      context: .
+      dockerfile: MessageProcessingService/Dockerfile
+    environment:
+      SignalRConfig__SignalRUrl: "http://signalrapp:8080/alertHub"
+      RabbitMQConfig__HostName: rabbitmq
+      ConnectionStrings__MongoDBConnection: "mongodb://mongo:27017"
+    networks:
+      - server_stats_network
+    depends_on:
+      - signalrapp
+      - rabbitmq
+      - mongo
+
+networks:
+  server_stats_network:
+    driver: bridge

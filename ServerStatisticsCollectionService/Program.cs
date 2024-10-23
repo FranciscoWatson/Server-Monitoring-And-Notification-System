@@ -2,9 +2,11 @@
 using ServerStatisticsCollectionService.Factories;
 
 
+
 var configuration = new ConfigurationBuilder()
 .SetBasePath(Directory.GetCurrentDirectory())
-.AddJsonFile("appsettings.json")
+.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+.AddEnvironmentVariables()
 .Build();
 
 var messageQueuePublisherFactory = new MessageQueuePublisherFactory();
@@ -17,4 +19,4 @@ var statisticsCollectionService = serverStatisticsCollectorFactory.Create(config
 
 statisticsCollectionService.StartAsync();
 
-Console.ReadKey();
+await Task.Run(() => Thread.Sleep(Timeout.Infinite));

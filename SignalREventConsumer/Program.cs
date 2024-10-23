@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Configuration;
 
 var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
             .Build();
 
 var signalRUrl = configuration.GetSection("SignalRConfig")["SignalRUrl"];
@@ -22,8 +23,7 @@ try
 {
     await hubConnection.StartAsync();
     Console.WriteLine("Connected to SignalR hub.");
-    Console.WriteLine("Press any key to exit...");
-    Console.ReadKey();
+    await Task.Run(() => Thread.Sleep(Timeout.Infinite));
 }
 catch (Exception ex)
 {

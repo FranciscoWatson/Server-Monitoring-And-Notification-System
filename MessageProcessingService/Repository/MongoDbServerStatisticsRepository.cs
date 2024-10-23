@@ -23,7 +23,7 @@ namespace MessageProcessingService.Repository
 
         public async Task InsertAsync(ServerStatistics serverStatistics)
         {
-            _serverStatisticsCollection.InsertOneAsync(serverStatistics);
+            await _serverStatisticsCollection.InsertOneAsync(serverStatistics);
         }
 
     }
